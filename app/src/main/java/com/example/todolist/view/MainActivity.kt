@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
 import com.example.todolist.databinding.ActivityMainBinding
 import com.example.todolist.viewmodel.MainActivityViewModel
+import kotlinx.android.synthetic.main.activity_main.view.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,6 +32,8 @@ class MainActivity : AppCompatActivity() {
         setupTaskList()
         //OBSERVER
         observeTaskData()
+        // FAB
+        setupFab()
 
     }
 
@@ -66,6 +69,16 @@ class MainActivity : AppCompatActivity() {
             recyclerAdapter.updateTasks(tasks)
         }
 
+    }
+
+    // FLOATING ACTION BUTTON
+    private fun setupFab() {
+        binding.coordinatorLayout.fab?.let { fab ->
+            fab.setOnClickListener {
+                // Open TaskEntryDialog fragment
+                TaskEntryDialog().show(supportFragmentManager, "TaskEntryDialog")
+            }
+        }
     }
 
 }
