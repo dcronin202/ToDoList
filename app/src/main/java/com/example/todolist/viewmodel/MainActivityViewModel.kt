@@ -11,7 +11,7 @@ class MainActivityViewModel : ViewModel() {
     companion object {
         private val TAG = MainActivityViewModel::class.java.simpleName
     }
-    
+
     // GET LIST OF TASKS
     private val taskListData = MutableLiveData<List<Task>>()
     val fetchTasks: LiveData<List<Task>>

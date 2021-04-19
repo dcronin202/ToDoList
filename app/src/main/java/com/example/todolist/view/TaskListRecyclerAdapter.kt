@@ -26,4 +26,8 @@ class TaskListRecyclerAdapter(private var taskList: List<Task> = listOf())
 
     override fun getItemCount(): Int = taskList.size
 
+    fun updateTasks(taskList: List<Task>) {
+        this.taskList = taskList
+        notifyDataSetChanged()
+    }
 }
