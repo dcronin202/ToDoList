@@ -29,4 +29,14 @@ class MainActivityViewModel : ViewModel() {
         updateLiveData(newTaskList)
     }
 
+    fun addTask(task: Task) {
+        newTaskList.add(task)
+        updateLiveData(newTaskList)
+    }
+
+    fun deleteTask(task: Task) {
+        newTaskList.remove(task)
+        updateLiveData(newTaskList)
+    }
+
 }
