@@ -9,12 +9,19 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/get_started_message"
+<!--        <TextView-->
+<!--            android:id="@+id/get_started_message"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="center"-->
+<!--            android:text="Click the button below to add a task" />-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Click the button below to add a task" />
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
