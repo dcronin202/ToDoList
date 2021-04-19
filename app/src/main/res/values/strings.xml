@@ -1,3 +1,16 @@
 <resources>
-    <string name="app_name">ToDoList</string>
+    <string name="app_name">To-Do List</string>
+    
+    <!-- MISC -->
+    <string name="empty_list_message">Click the button below to add a task</string>
+
+    <!-- DIALOG -->
+    <string name="dialog_title">New task</string>
+    <string name="dialog_hint">Enter a new task</string>
+    <string name="dialog_positive_button">Add</string>
+    <string name="dialog_negative_button">Cancel</string>
+
+    <!-- CONTENT DESCRIPTIONS -->
+    <string name="fab_content_description">Add a new task</string>
+
 </resources>

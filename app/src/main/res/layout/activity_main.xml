@@ -14,7 +14,7 @@
 <!--            android:layout_width="match_parent"-->
 <!--            android:layout_height="match_parent"-->
 <!--            android:gravity="center"-->
-<!--            android:text="Click the button below to add a task" />-->
+<!--            android:text="@string/empty_list_message" />-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -30,7 +30,7 @@
             android:layout_gravity="end|bottom"
             android:layout_margin="16dp"
             android:src="@drawable/ic_baseline_add_24"
-            android:contentDescription="Add a new task" />
+            android:contentDescription="@string/fab_content_description" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

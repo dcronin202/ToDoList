@@ -33,11 +33,11 @@ class TaskEntryDialog : DialogFragment() {
             val builder = AlertDialog.Builder(activity)
 
             builder.setView(binding.root)
-                .setTitle("New task")
-                .setPositiveButton("Add") { dialogInterface, id ->
+                .setTitle(getString(R.string.dialog_title))
+                .setPositiveButton(getString(R.string.dialog_positive_button)) { dialogInterface, id ->
                     addNewTask()
                 }
-                .setNegativeButton("Cancel") { dialogInterface, id ->
+                .setNegativeButton(getString(R.string.dialog_negative_button)) { dialogInterface, id ->
                     dialogInterface.cancel()
                 }
 
