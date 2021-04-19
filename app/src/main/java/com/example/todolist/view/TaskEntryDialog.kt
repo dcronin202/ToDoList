@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProviders
@@ -22,6 +23,15 @@ class TaskEntryDialog : DialogFragment() {
 
         binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.task_input_dialog,
             null, false)
+
+        // Enable ADD button once edit text field is not empty
+        binding.taskInput.doOnTextChanged { text, start, before, count ->
+            val textLength = text?.length
+            val dialog = dialog as AlertDialog?
+            if (textLength != null) {
+                dialog?.getButton(AlertDialog.BUTTON_POSITIVE)?.isEnabled = textLength > 0
+            }
+        }
 
         return activity?.let { activity ->
             // Get shared instance of ViewModel from the MainActivity
@@ -45,6 +55,13 @@ class TaskEntryDialog : DialogFragment() {
             builder.create()
 
         } ?: throw IllegalStateException("Activity cannot be null")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Disable ADD button when edit text field is empty
+        val dialog = dialog as AlertDialog?
+        dialog?.getButton(AlertDialog.BUTTON_POSITIVE)?.isEnabled = false
     }
 
     private fun addNewTask() {
