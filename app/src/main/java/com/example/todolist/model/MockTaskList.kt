@@ -1,7 +1,7 @@
 package com.example.todolist.model
 
 object MockTaskList {
-    
+
     fun getMockTaskList(): List<Task> {
         return listOf(
             Task(state = 0, content = "Task 1"),
