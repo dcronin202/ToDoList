@@ -9,6 +9,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.todolist.R
 import com.example.todolist.databinding.TaskInputDialogBinding
+import com.example.todolist.model.Task
 import com.example.todolist.viewmodel.MainActivityViewModel
 import java.lang.IllegalStateException
 
@@ -34,7 +35,7 @@ class TaskEntryDialog : DialogFragment() {
             builder.setView(binding.root)
                 .setTitle("New task")
                 .setPositiveButton("Add") { dialogInterface, id ->
-                    //
+                    addNewTask()
                 }
                 .setNegativeButton("Cancel") { dialogInterface, id ->
                     dialogInterface.cancel()
@@ -44,6 +45,14 @@ class TaskEntryDialog : DialogFragment() {
             builder.create()
 
         } ?: throw IllegalStateException("Activity cannot be null")
+    }
+
+    private fun addNewTask() {
+        val taskEntry = binding.taskInput.text.toString()
+        val task = Task(0, taskEntry)
+
+        dialogViewModel.addTask(task)
+        binding.taskInput.text.clear()
     }
 
 }
