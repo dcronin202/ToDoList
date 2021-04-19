@@ -6,12 +6,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.databinding.TaskItemLayoutBinding
 import com.example.todolist.model.Task
 
-class TaskListRecyclerAdapter(private var taskList: List<Task> = listOf())
+class TaskListRecyclerAdapter(
+    private var taskList: List<Task> = listOf(),
+    private val completeTaskAction: (Task) -> Unit,
+    private val deleteTaskAction: (Task) -> Unit
+    )
     : RecyclerView.Adapter<TaskListRecyclerAdapter.TaskListViewHolder>() {
 
     inner class TaskListViewHolder(val binding: TaskItemLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(task: Task) {
             binding.taskContent.text = task.content
+
+            binding.radioButton.setOnClickListener {
+                completeTaskAction(task)
+            }
+            binding.delete.setOnClickListener {
+                deleteTaskAction(task)
+            }
         }
     }
 
