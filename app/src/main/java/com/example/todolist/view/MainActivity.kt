@@ -52,7 +52,12 @@ class MainActivity : AppCompatActivity() {
         linearLayoutManager = LinearLayoutManager(this)
         recyclerAdapter = TaskListRecyclerAdapter(
             taskList = arrayListOf(),
-            completeTaskAction = { },
+            completeTaskAction = { task ->
+                mainActivityViewModel.completeTask(task)
+            },
+            resetTaskAction = { task ->
+                mainActivityViewModel.resetToCurrent(task)
+            },
             deleteTaskAction = { task ->
                 mainActivityViewModel.deleteTask(task)
             }
@@ -63,8 +68,7 @@ class MainActivity : AppCompatActivity() {
 
     // OBSERVE DATA
     private fun observeTaskData() {
-        mainActivityViewModel.fetchMockTasks()
-
+        // mainActivityViewModel.fetchMockTasks()
         mainActivityViewModel.fetchTasks.observe(this) { tasks ->
             recyclerAdapter.updateTasks(tasks)
         }
