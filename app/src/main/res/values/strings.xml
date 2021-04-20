@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">To-Do List</string>
 
+    <!-- TASK LIST HEADER -->
+    <string name="task_list_header">Today\'s tasks:</string>
+
     <!-- MENU -->
     <string name="menu_clear_completed">Clear completed</string>
     <string name="menu_sort">Sort alphabetically</string>
