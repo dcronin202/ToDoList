@@ -9,6 +9,7 @@ import com.example.todolist.model.Task
 class TaskListRecyclerAdapter(
     private var taskList: List<Task> = listOf(),
     private val completeTaskAction: (Task) -> Unit,
+    private val resetTaskAction: (Task) -> Unit,
     private val deleteTaskAction: (Task) -> Unit
     )
     : RecyclerView.Adapter<TaskListRecyclerAdapter.TaskListViewHolder>() {
@@ -17,10 +18,13 @@ class TaskListRecyclerAdapter(
         fun bind(task: Task) {
             binding.taskContent.text = task.content
 
-            binding.radioButton.setOnClickListener {
+            binding.clickToComplete.setOnClickListener {
                 completeTaskAction(task)
             }
-            binding.delete.setOnClickListener {
+            binding.clickToReset.setOnClickListener {
+                resetTaskAction(task)
+            }
+            binding.clickToDelete.setOnClickListener {
                 deleteTaskAction(task)
             }
         }
