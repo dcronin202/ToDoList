@@ -2,6 +2,8 @@ package com.example.todolist.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -117,6 +119,34 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             snack.show()
+        }
+    }
+
+    //**  MENU  **//
+
+    // INFLATE CUSTOM MENU
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    // MENU DROPDOWN OPTIONS
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_clear_tasks -> {
+                // Do something here
+                true
+            }
+            R.id.menu_sort_tasks -> {
+                // Do something here
+                true
+            }
+            R.id.menu_reorder_tasks -> {
+                // Do something here
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
