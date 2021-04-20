@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">To-Do List</string>
+
+    <!-- MENU -->
+    <string name="menu_clear_completed">Clear completed</string>
+    <string name="menu_sort">Sort alphabetically</string>
+    <string name="menu_reorder">Reorder tasks</string>
     
     <!-- MISC -->
     <string name="empty_list_message">Click the button below to add a task</string>
