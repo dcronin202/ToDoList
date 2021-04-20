@@ -12,5 +12,8 @@
 
     <!-- CONTENT DESCRIPTIONS -->
     <string name="fab_content_description">Add a new task</string>
+    <string name="complete_content_description">Complete this task</string>
+    <string name="reset_content_description">Reset this task to in-progress</string>
+    <string name="delete_content_description">Delete this task</string>
 
 </resources>
