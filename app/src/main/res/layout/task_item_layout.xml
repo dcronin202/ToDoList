@@ -3,6 +3,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable name="task"
+            type="com.example.todolist.model.Task"/>
+    </data>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,6 +32,7 @@
                 android:focusable="true"
                 android:contentDescription="@string/complete_content_description"
                 android:src="@drawable/ic_baseline_radio_button_unchecked_24"
+                app:current_state_visible="@{task.stateAsEnum}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -42,6 +48,7 @@
                 android:focusable="true"
                 android:contentDescription="@string/reset_content_description"
                 android:src="@drawable/ic_baseline_check_24"
+                app:completed_state_visible="@{task.stateAsEnum}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -54,6 +61,7 @@
                 android:paddingBottom="16dp"
                 android:layout_marginStart="52dp"
                 android:layout_marginLeft="52dp"
+                android:text="@{task.content}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,6 +76,7 @@
                 android:focusable="true"
                 android:contentDescription="@string/delete_content_description"
                 android:src="@drawable/ic_baseline_close_24"
+                app:completed_state_visible="@{task.stateAsEnum}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

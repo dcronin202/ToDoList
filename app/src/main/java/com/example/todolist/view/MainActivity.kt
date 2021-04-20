@@ -3,6 +3,7 @@ package com.example.todolist.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
@@ -40,11 +41,13 @@ class MainActivity : AppCompatActivity() {
     // SET UP DATA BINDING
     private fun setupDataBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.lifecycleOwner = this // This is required for the BindingAdapter
     }
 
     // SET UP VIEWMODEL
     private fun setupViewModel() {
         mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
+        binding.viewModel = mainActivityViewModel // This is required for the BindingAdapter
     }
 
     // SET UP TASK LIST IN RECYCLER VIEW

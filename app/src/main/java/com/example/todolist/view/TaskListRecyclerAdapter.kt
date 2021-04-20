@@ -2,6 +2,7 @@ package com.example.todolist.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.databinding.TaskItemLayoutBinding
 import com.example.todolist.model.Task
@@ -16,7 +17,8 @@ class TaskListRecyclerAdapter(
 
     inner class TaskListViewHolder(val binding: TaskItemLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(task: Task) {
-            binding.taskContent.text = task.content
+            binding.lifecycleOwner = binding.root.context as LifecycleOwner // This is required for the BindingAdapter
+            binding.task = task
 
             binding.clickToComplete.setOnClickListener {
                 completeTaskAction(task)
