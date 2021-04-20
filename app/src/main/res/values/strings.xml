@@ -10,6 +10,12 @@
     <string name="dialog_positive_button">Add</string>
     <string name="dialog_negative_button">Cancel</string>
 
+    <!-- SNACKBAR MESSAGES -->
+    <string name="task_added_snackbar">Task added</string>
+    <string name="task_completed_snackbar">Task completed</string>
+    <string name="task_deleted_snackbar">Task deleted</string>
+    <string name="undo_task_deleted_snackbar">UNDO</string>
+
     <!-- CONTENT DESCRIPTIONS -->
     <string name="fab_content_description">Add a new task</string>
     <string name="complete_content_description">Complete this task</string>
