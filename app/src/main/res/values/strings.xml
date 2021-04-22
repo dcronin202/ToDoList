@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">To-Do List</string>
 
-    <!-- TASK LIST HEADER -->
-    <string name="task_list_header">Today\'s tasks:</string>
+    <!-- TASK LIST HEADERS -->
+    <string name="header_current_tasks">Today\'s tasks:</string>
+    <string name="header_completed_tasks">Completed tasks:</string>
 
     <!-- MENU -->
     <string name="menu_clear_completed">Clear completed</string>
