@@ -5,11 +5,12 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.example.todolist.model.DataListItem
 import com.example.todolist.model.Task
 import com.example.todolist.model.TaskState
 
 @BindingAdapter ("start_view_visible")
-fun updateStartViewVisibility(view: TextView, taskList: List<Task>?) {
+fun updateStartViewVisibility(view: TextView, taskList: List<DataListItem>?) {
     taskList?.let { tasks ->
         view.visibility = if (tasks.isEmpty()) View.VISIBLE else View.GONE
     }
