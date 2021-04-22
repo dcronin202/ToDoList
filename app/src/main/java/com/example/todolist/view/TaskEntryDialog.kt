@@ -66,9 +66,7 @@ class TaskEntryDialog : DialogFragment() {
 
     private fun addNewTask() {
         val taskEntry = binding.taskInput.text.toString()
-        val task = Task(0, taskEntry)
-
-        dialogViewModel.addTask(task)
+        dialogViewModel.addTask(taskEntry)
         binding.taskInput.text.clear()
     }
 
