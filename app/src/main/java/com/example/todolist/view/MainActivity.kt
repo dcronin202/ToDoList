@@ -56,18 +56,7 @@ class MainActivity : AppCompatActivity() {
     // SET UP TASK LIST IN RECYCLER VIEW
     private fun setupTaskList() {
         linearLayoutManager = LinearLayoutManager(this)
-        recyclerAdapter = TaskListRecyclerAdapter(
-            taskList = arrayListOf(),
-            completeTaskAction = { task ->
-                mainActivityViewModel.completeTask(task)
-            },
-            resetTaskAction = { task ->
-                mainActivityViewModel.resetToCurrent(task)
-            },
-            deleteTaskAction = { task ->
-                mainActivityViewModel.deleteTask(task)
-            }
-        )
+        recyclerAdapter = TaskListRecyclerAdapter(taskList = arrayListOf())
         binding.recyclerView.adapter = recyclerAdapter
         binding.recyclerView.layoutManager = linearLayoutManager
     }
