@@ -2,48 +2,45 @@ package com.example.todolist.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
+import com.example.todolist.R
+import com.example.todolist.databinding.TaskItemHeaderBinding
 import com.example.todolist.databinding.TaskItemLayoutBinding
+import com.example.todolist.model.DataListItem
 import com.example.todolist.model.Task
 
-class TaskListRecyclerAdapter(
-    private var taskList: List<Task> = listOf(),
-    private val completeTaskAction: (Task) -> Unit,
-    private val resetTaskAction: (Task) -> Unit,
-    private val deleteTaskAction: (Task) -> Unit
-    )
+class TaskListRecyclerAdapter(private var taskList: List<DataListItem> = listOf())
     : RecyclerView.Adapter<TaskListRecyclerAdapter.TaskListViewHolder>() {
 
-    inner class TaskListViewHolder(val binding: TaskItemLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(task: Task) {
-            binding.lifecycleOwner = binding.root.context as LifecycleOwner // This is required for the BindingAdapter
-            binding.task = task
+    companion object {
+        private const val TASK_ITEM = R.layout.task_item_layout
+    }
 
-            binding.clickToComplete.setOnClickListener {
-                completeTaskAction(task)
-            }
-            binding.clickToReset.setOnClickListener {
-                resetTaskAction(task)
-            }
-            binding.clickToDelete.setOnClickListener {
-                deleteTaskAction(task)
-            }
-        }
+    inner class TaskListViewHolder(val binding: ViewBinding) : RecyclerView.ViewHolder(binding.root)
+
+    override fun getItemCount(): Int = taskList.size
+
+    override fun getItemViewType(position: Int): Int {
+        return taskList[position].layoutId
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = TaskItemLayoutBinding.inflate(inflater, parent, false)
+        val binding = if (viewType == TASK_ITEM) {
+            TaskItemLayoutBinding.inflate(inflater, parent, false)
+        } else {
+            TaskItemHeaderBinding.inflate(inflater, parent, false)
+        }
         return TaskListViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: TaskListViewHolder, position: Int) =
-        holder.bind(taskList[position])
+    override fun onBindViewHolder(holder: TaskListViewHolder, position: Int) {
+        val listItem = taskList[position]
+        listItem.bind(holder.binding)
+    }
 
-    override fun getItemCount(): Int = taskList.size
-
-    fun updateTasks(taskList: List<Task>) {
+    fun updateTasks(taskList: List<DataListItem>) {
         this.taskList = taskList
         notifyDataSetChanged()
     }
