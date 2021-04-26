@@ -1,14 +1,14 @@
 package com.example.todolist.viewmodel
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.todolist.R
-import com.example.todolist.model.DataListItem
-import com.example.todolist.model.Header
-import com.example.todolist.model.MockTaskList
-import com.example.todolist.model.Task
+import com.example.todolist.database.TaskRepository
+import com.example.todolist.model.*
 
 class MainActivityViewModel : ViewModel() {
 
@@ -16,26 +16,25 @@ class MainActivityViewModel : ViewModel() {
         private val TAG = MainActivityViewModel::class.java.simpleName
     }
 
+    private lateinit var tasksInDatabase: TaskRepository
+
+    private var currentTaskHeader = Header(R.string.header_current_tasks)
+    private var completedTaskHeader = Header(R.string.header_completed_tasks)
+    private var pendingDeleteTask: Task? = null
+
     // GET LIST OF TASKS
     private val taskListData = MutableLiveData<List<DataListItem>>()
     val fetchTasks: LiveData<List<DataListItem>>
         get() = taskListData
 
     // TRACK TASK STATE CHANGE WHEN USER ADDS, COMPLETES, OR DELETES A TASK
-    private val taskStateChange = MutableLiveData<Task>()
-    val fetchTaskState: LiveData<Task>
+    private val taskStateChange = MutableLiveData<TaskState>()
+    val fetchTaskState: LiveData<TaskState>
         get() = taskStateChange
 
-    private val currentTaskList = arrayListOf<DataListItem>()
-    private val completedTaskList = arrayListOf<DataListItem>()
 
-    private val mockCurrentTasks = MockTaskList.getCurrentTaskList()
-    private val mockCompletedTasks = MockTaskList.getCompletedTaskList()
-
-    private fun updateLiveData() {
+    private fun updateLiveData(currentTaskList: List<DataListItem>, completedTaskList: List<DataListItem>) {
         val updatedList = mutableListOf<DataListItem>()
-        val currentTaskHeader = Header(R.string.header_current_tasks)
-        val completedTaskHeader = Header(R.string.header_completed_tasks)
 
         if (currentTaskList.isNotEmpty()) updatedList.add(currentTaskHeader)
         updatedList.addAll(currentTaskList)
@@ -46,91 +45,71 @@ class MainActivityViewModel : ViewModel() {
         taskListData.value = updatedList
     }
 
+    fun fetchTasksFromDatabase(owner: LifecycleOwner, application: Application) {
+        tasksInDatabase = TaskRepository(application)
+        // Get list of TaskEntities from database and convert to Tasks
+        tasksInDatabase.getAllTasks().observe(owner) { tasks ->
+            val taskList: List<Task> = tasks.map { taskEntity ->
+                Task(id = taskEntity.id, state = taskEntity.state, content = taskEntity.content).apply {
+                    completeTaskAction = {
+                        completeTask(it)
+                    }
+                    resetTaskAction = {
+                        resetToCurrent(it)
+                    }
+                    deleteTaskAction = {
+                        deleteTask(it)
+                        //createTempTaskAndDelete(it)
+                    }
+                }
+            }
+
+            val currentTasks = taskList.filter { it.getStateAsEnum() == TaskState.CURRENT }
+            val completedTasks = taskList.filter { it.getStateAsEnum() == TaskState.COMPLETED }
+
+            // Pass current and completed task lists to updateLiveData function
+            updateLiveData(currentTasks, completedTasks)
+        }
+    }
+
     fun fetchMockTasks() {
-        val updatedList = mutableListOf<DataListItem>()
-        val currentTaskHeader = Header(R.string.header_current_tasks)
-        val completedTaskHeader = Header(R.string.header_completed_tasks)
+        val mockCurrentTasks = MockTaskList.getCurrentTaskList()
+        val mockCompletedTasks = MockTaskList.getCompletedTaskList()
 
-        updatedList.add(currentTaskHeader)
-        updatedList.addAll(mockCurrentTasks)
-        updatedList.add(completedTaskHeader)
-        updatedList.addAll(mockCompletedTasks)
-
-        updateLiveData()
+        updateLiveData(mockCurrentTasks, mockCompletedTasks)
     }
 
     fun addTask(taskContent: String) {
-        val newTask = Task(state = 0, content = taskContent).apply {
-            completeTaskAction = { task ->
-                completeTask(task)
-            }
-            resetTaskAction = { task ->
-                resetToCurrent(task)
-            }
-            deleteTaskAction = { task ->
-                deleteTask(task)
-            }
-        }
-        currentTaskList.add(newTask)
-        taskStateChange.postValue(newTask)
-        updateLiveData()
+        val newTask = Task(id = 0, state = 0, content = taskContent)
+        tasksInDatabase.insert(newTask)
+        taskStateChange.postValue(TaskState.CURRENT)
     }
 
     private fun completeTask(task: Task) {
-        Log.d(TAG, "Original state is $task")
-
-        // Search for task in list
-        val itemInList = currentTaskList.firstOrNull {
-            // Verify model type and the correct data
-            it is Task && it == task
-        }
-
-        val taskInList = itemInList as? Task ?: return
-
-        // Update state to COMPLETE
-        taskInList.complete()
-
-        // Remove task from current list and add to completed list
-        currentTaskList.remove(taskInList)
-        completedTaskList.add(taskInList)
-        taskStateChange.postValue(taskInList)
-        updateLiveData()
-
-        Log.d(TAG, "State updated to $task")
+        task.complete()
+        tasksInDatabase.update(task)
+        taskStateChange.postValue(TaskState.COMPLETED)
     }
 
     private fun resetToCurrent(task: Task) {
-        val itemInList = completedTaskList.firstOrNull {
-            it is Task && it == task
-        } ?: return
+        task.resetToCurrent()
+        tasksInDatabase.update(task)
+        taskStateChange.postValue(TaskState.CURRENT)
+    }
 
-        val taskInList = itemInList as? Task ?: return
-
-        // Update state to CURRENT
-        taskInList.resetToCurrent()
-
-        // Remove task from complete list and add it back to current list
-        completedTaskList.remove(taskInList)
-        currentTaskList.add(0, taskInList)
-
-        taskStateChange.postValue(taskInList)
-        updateLiveData()
+    fun undoDeleteTaskAction() {
+        val backupTask = pendingDeleteTask?.let { Task(id = 0, state = 0, content = it.content) }
+        if (backupTask != null) {
+            tasksInDatabase.insert(backupTask)
+        }
     }
 
     private fun deleteTask(task: Task) {
-        val itemInList = completedTaskList.firstOrNull {
-            it is Task && it == task
-        } ?: return
-
-        val taskInList = itemInList as? Task?: return
-
-        // Update state to DELETED
-        taskInList.delete()
-
-        // Remove task from completed task list
-        taskStateChange.postValue(taskInList)
-        completedTaskList.remove(taskInList)
-        updateLiveData()
+        pendingDeleteTask = task
+        Log.d(TAG, "duplicate task = ${pendingDeleteTask!!.content}")
+        task.delete()
+        tasksInDatabase.delete(task)
+        taskStateChange.postValue(TaskState.DELETED)
     }
 
 }
