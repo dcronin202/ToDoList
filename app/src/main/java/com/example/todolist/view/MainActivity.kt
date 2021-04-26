@@ -49,7 +49,8 @@ class MainActivity : AppCompatActivity() {
 
     // SET UP VIEWMODEL
     private fun setupViewModel() {
-        mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
+        //mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java) // This is deprecated
+        mainActivityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
         binding.viewModel = mainActivityViewModel // This is required for the BindingAdapter
     }
 
