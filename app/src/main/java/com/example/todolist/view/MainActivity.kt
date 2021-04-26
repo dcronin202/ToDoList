@@ -107,7 +107,9 @@ class MainActivity : AppCompatActivity() {
             val snack = Snackbar.make(binding.coordinatorLayout, message, Snackbar.LENGTH_LONG)
             if (taskState == TaskState.DELETED) {
                 snack.setAction(getString(R.string.undo_task_deleted_snackbar)) {
-                    // TODO: Create UNDO function and add it here
+                    // Restore task content if UNDO is clicked
+                    mainActivityViewModel.undoDeleteTaskAction()
+
                 }
             }
             snack.show()
