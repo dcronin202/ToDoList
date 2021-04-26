@@ -5,7 +5,7 @@ import androidx.viewbinding.ViewBinding
 import com.example.todolist.R
 import com.example.todolist.databinding.TaskItemLayoutBinding
 
-class Task(private var state: Int, val content: String) : DataListItem {
+data class Task(val id: Int, var state: Int, val content: String) : DataListItem {
 
     var completeTaskAction: ((Task) -> Unit)? = null
     var resetTaskAction: ((Task) -> Unit)? = null
