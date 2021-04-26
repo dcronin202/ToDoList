@@ -16,9 +16,10 @@ class TaskRepository(application: Application) {
         allTasks = taskDao.getAllTasks()
     }
 
-    fun insert(task: TaskEntity) {
+    fun insert(task: Task) {
         subscribeOnBackground {
-            taskDao.insertTask(task)
+            val taskItem = TaskEntity(task.id, task.state, task.content)
+            taskDao.insertTask(taskItem)
         }
     }
 
