@@ -28,21 +28,21 @@ abstract class TaskDatabase : RoomDatabase() {
             return instance!!
         }
 
-        private val roomCallback = object : Callback() {
-            override fun onCreate(db: SupportSQLiteDatabase) {
-                super.onCreate(db)
-                populateDatabase(instance!!)
-            }
-        }
-
-        private fun populateDatabase(db: TaskDatabase) {
-            val taskDao = db.taskDao()
-            subscribeOnBackground {
-                taskDao.insertTask(TaskEntity(1, 0, "Task 1"))
-                taskDao.insertTask(TaskEntity(2, 0, "Task 2"))
-                taskDao.insertTask(TaskEntity(3, 0, "Task 3"))
-            }
-        }
+//        private val roomCallback = object : Callback() {
+//            override fun onCreate(db: SupportSQLiteDatabase) {
+//                super.onCreate(db)
+//                populateDatabase(instance!!)
+//            }
+//        }
+//
+//        private fun populateDatabase(db: TaskDatabase) {
+//            val taskDao = db.taskDao()
+//            subscribeOnBackground {
+//                taskDao.insertTask(TaskEntity(1, 0, "Task 1"))
+//                taskDao.insertTask(TaskEntity(2, 0, "Task 2"))
+//                taskDao.insertTask(TaskEntity(3, 0, "Task 3"))
+//            }
+//        }
     }
 
 }
