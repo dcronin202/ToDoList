@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
@@ -65,6 +66,7 @@ class MainActivity : AppCompatActivity() {
     // OBSERVE DATA
     private fun observeTaskData() {
         // mainActivityViewModel.fetchMockTasks()
+        mainActivityViewModel.fetchTasksFromDatabase(this, application)
 
         // Update recycler view when user adds/deletes a task
         mainActivityViewModel.fetchTasks.observe(this) { tasks ->
@@ -73,7 +75,7 @@ class MainActivity : AppCompatActivity() {
 
         // Display Snackbar message based on task state
         mainActivityViewModel.fetchTaskState.observe(this) { taskState ->
-            fetchSnackbar(taskState.getStateAsEnum())
+            fetchSnackbar(taskState)
         }
     }
 
