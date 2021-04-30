@@ -1,20 +1,11 @@
 package com.example.todolist.database
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import com.example.todolist.model.Task
 import com.example.todolist.utils.subscribeOnBackground
+import javax.inject.Inject
 
-class TaskRepository(application: Application) {
-
-    private var taskDao: TaskDao
-    private var allTasks: LiveData<List<TaskEntity>>
-    private val database = TaskDatabase.getInstance(application)
-
-    init {
-        taskDao = database.taskDao()
-        allTasks = taskDao.getAllTasks()
-    }
+class TaskRepository @Inject constructor(private val taskDao: TaskDao) {
 
     fun insert(task: Task) {
         subscribeOnBackground {
@@ -44,6 +35,6 @@ class TaskRepository(application: Application) {
     }
 
     fun getAllTasks() : LiveData<List<TaskEntity>> {
-        return allTasks
+        return taskDao.getAllTasks()
     }
 }
