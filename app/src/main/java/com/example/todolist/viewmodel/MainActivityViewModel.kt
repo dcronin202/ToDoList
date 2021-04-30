@@ -1,6 +1,5 @@
 package com.example.todolist.viewmodel
 
-import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -9,14 +8,14 @@ import androidx.lifecycle.ViewModel
 import com.example.todolist.R
 import com.example.todolist.database.TaskRepository
 import com.example.todolist.model.*
+import javax.inject.Inject
 
-class MainActivityViewModel : ViewModel() {
+class MainActivityViewModel @Inject constructor(private val taskRepository: TaskRepository)
+    : ViewModel() {
 
     companion object {
         private val TAG = MainActivityViewModel::class.java.simpleName
     }
-
-    private lateinit var tasksInDatabase: TaskRepository
 
     private var currentTaskHeader = Header(R.string.header_current_tasks)
     private var completedTaskHeader = Header(R.string.header_completed_tasks)
@@ -45,10 +44,9 @@ class MainActivityViewModel : ViewModel() {
         taskListData.value = updatedList
     }
 
-    fun fetchTasksFromDatabase(owner: LifecycleOwner, application: Application) {
-        tasksInDatabase = TaskRepository(application)
+    fun fetchTasksFromDatabase(owner: LifecycleOwner) {
         // Get list of TaskEntities from database and convert to Tasks
-        tasksInDatabase.getAllTasks().observe(owner) { tasks ->
+        taskRepository.getAllTasks().observe(owner) { tasks ->
             val taskList: List<Task> = tasks.map { taskEntity ->
                 Task(id = taskEntity.id, state = taskEntity.state, content = taskEntity.content).apply {
                     completeTaskAction = {
@@ -59,7 +57,6 @@ class MainActivityViewModel : ViewModel() {
                     }
                     deleteTaskAction = {
                         deleteTask(it)
-                        //createTempTaskAndDelete(it)
                     }
                 }
             }
@@ -81,26 +78,26 @@ class MainActivityViewModel : ViewModel() {
 
     fun addTask(taskContent: String) {
         val newTask = Task(id = 0, state = 0, content = taskContent)
-        tasksInDatabase.insert(newTask)
+        taskRepository.insert(newTask)
         taskStateChange.postValue(TaskState.CURRENT)
     }
 
     private fun completeTask(task: Task) {
         task.complete()
-        tasksInDatabase.update(task)
+        taskRepository.update(task)
         taskStateChange.postValue(TaskState.COMPLETED)
     }
 
     private fun resetToCurrent(task: Task) {
         task.resetToCurrent()
-        tasksInDatabase.update(task)
+        taskRepository.update(task)
         taskStateChange.postValue(TaskState.CURRENT)
     }
 
     fun undoDeleteTaskAction() {
         val backupTask = pendingDeleteTask?.let { Task(id = 0, state = 0, content = it.content) }
         if (backupTask != null) {
-            tasksInDatabase.insert(backupTask)
+            taskRepository.insert(backupTask)
         }
     }
 
@@ -108,7 +105,7 @@ class MainActivityViewModel : ViewModel() {
         pendingDeleteTask = task
         Log.d(TAG, "duplicate task = ${pendingDeleteTask!!.content}")
         task.delete()
-        tasksInDatabase.delete(task)
+        taskRepository.delete(task)
         taskStateChange.postValue(TaskState.DELETED)
     }
 

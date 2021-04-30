@@ -15,7 +15,7 @@ class ApplicationModule(val application: Application) {
 
     @Provides
     fun provideApplication() : Application = application
-    
+
     @Provides
     fun provideTaskDatabase(application: Application): TaskDatabase {
         return Room.databaseBuilder(

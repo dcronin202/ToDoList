@@ -10,7 +10,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.todolist.R
 import com.example.todolist.databinding.TaskInputDialogBinding
-import com.example.todolist.model.Task
 import com.example.todolist.viewmodel.MainActivityViewModel
 import java.lang.IllegalStateException
 
