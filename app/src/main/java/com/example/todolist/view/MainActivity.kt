@@ -6,14 +6,15 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
 import com.example.todolist.databinding.ActivityMainBinding
 import com.example.todolist.model.TaskState
 import com.example.todolist.viewmodel.MainActivityViewModel
 import com.google.android.material.snackbar.Snackbar
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.view.*
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,12 +22,17 @@ class MainActivity : AppCompatActivity() {
         private val TAG = MainActivity::class.java.simpleName
     }
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
     private lateinit var mainActivityViewModel: MainActivityViewModel
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var recyclerAdapter: TaskListRecyclerAdapter
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // DAGGER
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
 
         // DATA BINDING
@@ -51,7 +57,7 @@ class MainActivity : AppCompatActivity() {
     // SET UP VIEWMODEL
     private fun setupViewModel() {
         //mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java) // This is deprecated
-        mainActivityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+        mainActivityViewModel = ViewModelProvider(this, viewModelFactory).get(MainActivityViewModel::class.java)
         binding.viewModel = mainActivityViewModel // This is required for the BindingAdapter
     }
 
@@ -66,7 +72,7 @@ class MainActivity : AppCompatActivity() {
     // OBSERVE DATA
     private fun observeTaskData() {
         // mainActivityViewModel.fetchMockTasks()
-        mainActivityViewModel.fetchTasksFromDatabase(this, application)
+        mainActivityViewModel.fetchTasksFromDatabase(this)
 
         // Update recycler view when user adds/deletes a task
         mainActivityViewModel.fetchTasks.observe(this) { tasks ->
