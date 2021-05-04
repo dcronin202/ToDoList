@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
 import com.example.todolist.databinding.TaskListFragmentBinding
@@ -81,7 +82,7 @@ class TaskListFragment : Fragment() {
     // FLOATING ACTION BUTTON CLICK LISTENER
     private fun setUpFab() {
         binding.fab.setOnClickListener {
-            activity?.supportFragmentManager?.let { it1 -> TaskEntryDialog().show(it1, "TaskEntryDialog") }
+            Navigation.findNavController(it).navigate(R.id.action_taskListFragment_to_taskEntryDialog)
         }
     }
 
