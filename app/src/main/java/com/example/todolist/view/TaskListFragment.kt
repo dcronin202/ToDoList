@@ -46,7 +46,9 @@ class TaskListFragment : Fragment() {
 
     // SET UP VIEW MODEL
     private fun setUpViewModel() {
-        mainActivityViewModel = ViewModelProvider(this, viewModelFactory).get(MainActivityViewModel::class.java)
+        val viewModelStoreOwner: ViewModelStoreOwner = activity as? ViewModelStoreOwner
+                ?: throw IllegalStateException("Activity cannot be cast to ViewModelStoreOwner")
+        mainActivityViewModel = ViewModelProvider(viewModelStoreOwner, viewModelFactory).get(MainActivityViewModel::class.java)
         binding.viewModel = mainActivityViewModel
     }
 

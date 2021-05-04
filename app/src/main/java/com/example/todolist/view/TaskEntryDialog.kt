@@ -7,7 +7,8 @@ import android.view.LayoutInflater
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import com.example.todolist.R
 import com.example.todolist.databinding.TaskInputDialogBinding
 import com.example.todolist.viewmodel.MainActivityViewModel
@@ -34,9 +35,9 @@ class TaskEntryDialog : DialogFragment() {
 
         return activity?.let { activity ->
             // Get shared instance of ViewModel from the MainActivity
-            val mainActivity = activity as? MainActivity
-                ?: throw IllegalStateException("Dialog should belong to the main activity")
-            dialogViewModel = ViewModelProviders.of(mainActivity).get(MainActivityViewModel::class.java)
+            val viewModelStoreOwner: ViewModelStoreOwner = activity as? ViewModelStoreOwner
+                ?: throw IllegalStateException("Dialog cannot get instance of mainActivity store owner")
+            dialogViewModel = ViewModelProvider(viewModelStoreOwner).get(MainActivityViewModel::class.java)
 
             // Builder class for convenient dialog construction
             val builder = AlertDialog.Builder(activity)
